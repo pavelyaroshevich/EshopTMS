@@ -1,0 +1,87 @@
+<th:block th:with="products=${page.content}">
+  <div th:if="${products != null}">
+    <div th:if="${products.size() == 0}">
+      <h5 class="text-center mt-5">No suitable products found. Enter or change the search terms!</h5>
+    </div>
+    <div th:if="${products.size() != 0}">
+      <div th:each="product : ${products}">
+        <div class="card mb-3 ml-1 border border-secondary rounded rounded-5 shadow-sm p-2 bg-body-tertiary rounded mr-1"
+             style="min-width: 18rem">
+          <div class="container text-center mb-2">
+            <div class="row">
+              <div th:with="authorizedUser=${session.userAccessPermission}">
+                <div th:if="${authorizedUser == null}">
+                  <div class="btn-group btn-group-fill" style="min-width: 17.3rem">
+                    <a th:href="@{/product/__${product.id}__}"
+                       class="text-light text-decoration-none btn btn-success btn-block w-auto"
+                       aria-current="page">
+                      To product
+                    </a>
+                  </div>
+                </div>
+                <div th:if="${authorizedUser != null}">
+                  <div class="btn-group btn-group-fill">
+                    <div class="btn btn-success p-2" style="min-width: 6rem">
+                      <a th:href="@{/product/__${product.id}__}"
+                         class="text-light text-decoration-none"
+                         aria-current="page">
+                        To product
+                      </a>
+                    </div>
+                    <div class="btn btn-success p-2" style="min-width: 5.3rem">
+                      <a th:href="@{/add-cart(id=${product.id}, shop=true, location='none')}"
+                         class="text-light text-decoration-none"
+                         aria-current="page">
+                        Buy
+                      </a>
+                    </div>
+                    <div class="btn btn-success">
+                      <a th:href="@{/add-cart(id=${product.id}, shop='none', location='search')}">
+                        <div class="text-center text-light text-decoration-none p-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 16">
+                            <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z"/>
+                            <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                          </svg>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="btn btn-success">
+                      <a th:href="@{/add-favorite(id=${product.id}, shop='none', location='search')}">
+                        <div class="text-center text-light text-decoration-none p-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                            <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                          </svg>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row g-0">
+            <div class="col-md-3">
+              <img th:src="@{/images/__${#strings.toLowerCase(product.category)}__/__${product.name}__.jpg}"
+                   class="img-fluid rounded-start w-100 p-3"
+                   th:alt="${product.name}">
+            </div>
+            <div class="col-md-9">
+              <div class="card-body">
+                <h5 class="card-title text-center" th:text="${product.name}"></h5>
+                <p class="card-text font-italic p-1" th:text="${product.info + '.'}"></p>
+              </div>
+            </div>
+          </div>
+          <div class="container text-center m-0 p-0">
+            <div class="row">
+              <div class="col-sm-12 fst-italic">
+                <p th:text="${product.price + '$'}"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <th:block th:insert="~{/include/pagination}"/>
+    </div>
+  </div>
+</th:block>
